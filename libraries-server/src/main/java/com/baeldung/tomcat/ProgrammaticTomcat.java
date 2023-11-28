@@ -6,9 +6,11 @@ import org.apache.catalina.startup.Tomcat;
 import org.apache.tomcat.util.descriptor.web.FilterDef;
 import org.apache.tomcat.util.descriptor.web.FilterMap;
 
+import javax.servlet.ServletException;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.URISyntaxException;
 import java.util.Random;
 
 /**
@@ -25,9 +27,9 @@ public class ProgrammaticTomcat {
         }
     }
 
-    private Tomcat tomcat = null;
+    private static Tomcat tomcat = null;
 
-    private int randomPort;
+    private static int randomPort;
 
     public ProgrammaticTomcat() {
         // Get a random port number in range 6000 (inclusive) - 9000 (exclusive)
@@ -39,18 +41,20 @@ public class ProgrammaticTomcat {
     }
 
     // uncomment for live test
-    // public static void main(String[] args) throws LifecycleException, ServletException, URISyntaxException, IOException {
-    // startTomcat();
-    // }
+    public static void main(String[] args) throws LifecycleException, ServletException, URISyntaxException, IOException {
+     startTomcat();
+     }
 
 
     public int getPort() {
         return randomPort;
     }
 
-    public void startTomcat() throws LifecycleException {
+    public static void startTomcat() throws LifecycleException {
         tomcat = new Tomcat();
-        tomcat.setPort(randomPort);
+        // Connection refused
+        //tomcat.setPort(randomPort);
+        tomcat.setPort(8080);
         tomcat.setHostname("localhost");
         String appBase = ".";
         tomcat.getHost().setAppBase(appBase);
@@ -77,9 +81,9 @@ public class ProgrammaticTomcat {
 
         tomcat.start();
         // uncomment for live test
-        // tomcat
-        // .getServer()
-        // .await();
+        tomcat
+        .getServer()
+        .await();
     }
 
     public void stopTomcat() throws LifecycleException {
